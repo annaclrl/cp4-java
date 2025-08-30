@@ -119,5 +119,30 @@ public class Menu {
         else System.out.println("Atleta não encontrado!");
     }
 
+    private void editarAtleta() {
+        System.out.print("Código do atleta: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine();
+
+        Atleta existente = atletaDAO.pesquisarPorCodigo(codigo);
+        if(existente != null) {
+            System.out.print("Novo nome: ");
+            String nome = scanner.nextLine();
+
+            System.out.print("Nova idade: ");
+            int idade = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.print("Nova posição: ");
+            String posicao = scanner.nextLine();
+
+            Atleta atualizado = new Atleta(nome, idade, posicao);
+            atualizado.setTime(existente.getTime());
+            atletaDAO.editar(codigo, atualizado);
+
+            System.out.println("Atleta atualizado!");
+        } else System.out.println("Atleta não encontrado!");
+    }
+
 }
 
