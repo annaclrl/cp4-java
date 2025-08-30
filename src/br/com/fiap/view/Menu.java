@@ -144,5 +144,14 @@ public class Menu {
         } else System.out.println("Atleta não encontrado!");
     }
 
+    private void removerAtleta() {
+        System.out.print("Código do atleta: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine();
+
+        atletaDAO.remover(codigo);
+        System.out.println("Atleta removido!");
+    }
+
 }
 
