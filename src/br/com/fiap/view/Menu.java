@@ -5,6 +5,7 @@ import br.com.fiap.dao.TimeDAO;
 import br.com.fiap.dao.TreinadorDAO;
 import br.com.fiap.model.Atleta;
 
+import java.util.Map;
 import java.util.Scanner;
 
 public class Menu {
@@ -97,6 +98,14 @@ public class Menu {
         atletaDAO.cadastrar(atleta);
 
         System.out.println("Atleta cadastrado!");
+    }
+
+    private void listarAtletas() {
+        Map<Integer, Atleta> atletas = atletaDAO.listar();
+        if(atletas.isEmpty())
+            System.out.println("Nenhum atleta cadastrado.");
+        else for(Map.Entry<Integer, Atleta> entry : atletas.entrySet())
+            System.out.println("Código: " + entry.getKey() + " - " + entry.getValue().exibeInformacoes());
     }
 
 }
