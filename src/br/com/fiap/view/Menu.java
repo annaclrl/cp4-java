@@ -108,5 +108,16 @@ public class Menu {
             System.out.println("Código: " + entry.getKey() + " - " + entry.getValue().exibeInformacoes());
     }
 
+    private void buscarAtletaPorCodigo() {
+        System.out.print("Código do atleta: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine();
+
+        Atleta atleta = atletaDAO.pesquisarPorCodigo(codigo);
+        if(atleta != null)
+            System.out.println(atleta.exibeInformacoes());
+        else System.out.println("Atleta não encontrado!");
+    }
+
 }
 
