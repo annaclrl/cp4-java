@@ -3,6 +3,7 @@ package br.com.fiap.view;
 import br.com.fiap.dao.AtletaDAO;
 import br.com.fiap.dao.TimeDAO;
 import br.com.fiap.dao.TreinadorDAO;
+import br.com.fiap.model.Atleta;
 
 import java.util.Scanner;
 
@@ -79,6 +80,23 @@ public class Menu {
                     break;
             }
         } while(opcao != 0);
+    }
+
+    private void cadastrarAtleta() {
+        System.out.print("Nome: ");
+        String nome = scanner.nextLine();
+
+        System.out.print("Idade: ");
+        int idade = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Posição: ");
+        String posicao = scanner.nextLine();
+
+        Atleta atleta = new Atleta(nome, idade, posicao);
+        atletaDAO.cadastrar(atleta);
+
+        System.out.println("Atleta cadastrado!");
     }
 
 }
