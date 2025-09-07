@@ -1,6 +1,6 @@
 package br.com.fiap.dao;
 
-import java.sql.Time;
+import br.com.fiap.model.Time;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,4 +31,3 @@ public class TimeDAO {
         } else System.out.println("Time não encontrado!");
     }
 }
-
