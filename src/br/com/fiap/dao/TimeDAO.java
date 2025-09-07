@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TimeDAO {
-
+    ;
     private Map<Integer, Time> times = new HashMap<>();
     private int nextId = 1;
 
@@ -19,6 +19,16 @@ public class TimeDAO {
 
     public Time pesquisarPorCodigo(int codigo) {
         return times.get(codigo);
+    }
+
+    public Time pesquisarPorNome(String nome) {
+        String nomeBusca = nome.trim();
+        for (Time time : times.values()) {
+            if (time.getNome().trim().equalsIgnoreCase(nomeBusca)) {
+                return time;
+            }
+        }
+        return null;
     }
 
     public void remover(int codigo) {

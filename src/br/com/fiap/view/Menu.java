@@ -50,6 +50,131 @@ public class Menu {
         } while(opcao != 0);
     }
 
+    private void gerenciarAtletas() {
+        int opcao;
+        do {
+            System.out.println("\n=== GERENCIAR ATLETAS ===");
+            System.out.println("1. Cadastrar Atleta");
+            System.out.println("2. Listar Atletas");
+            System.out.println("3. Buscar Atleta por Código");
+            System.out.println("4. Buscar Atleta por Nome");
+            System.out.println("5. Editar Atleta");
+            System.out.println("6. Remover Atleta");
+            System.out.println("0. Voltar");
+
+            System.out.print("Escolha uma opção: ");
+            opcao = scanner.nextInt();
+            scanner.nextLine();
+
+            switch(opcao) {
+                case 1:
+                    cadastrarAtleta();
+                    break;
+                case 2:
+                    listarAtletas();
+                    break;
+                case 3:
+                    buscarAtletaPorCodigo();
+                    break;
+                case 4:
+                    buscarAtletaPorNome();
+                    break;
+                case 5:
+                    editarAtleta();
+                    break;
+                case 6:
+                    removerAtleta();
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        } while(opcao != 0);
+    }
+
+    private void cadastrarAtleta() {
+        System.out.print("Nome: ");
+        String nome = scanner.nextLine();
+
+        System.out.print("Idade: ");
+        int idade = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("Posição: ");
+        String posicao = scanner.nextLine();
+
+        Atleta atleta = new Atleta(nome, idade, posicao);
+        atletaDAO.cadastrar(atleta);
+
+        System.out.println("Atleta cadastrado!");
+    }
+
+    private void listarAtletas() {
+        Map<Integer, Atleta> atletas = atletaDAO.listar();
+        if(atletas.isEmpty())
+            System.out.println("Nenhum atleta cadastrado.");
+        else for(Map.Entry<Integer, Atleta> entry : atletas.entrySet())
+            System.out.println("Código: " + entry.getKey() + " - " + entry.getValue().exibeInformacoes());
+    }
+
+    private void buscarAtletaPorCodigo() {
+        System.out.print("Código do atleta: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine();
+
+        Atleta atleta = atletaDAO.pesquisarPorCodigo(codigo);
+        if(atleta != null)
+            System.out.println(atleta.exibeInformacoes());
+        else System.out.println("Atleta não encontrado!");
+    }
+
+    private void buscarAtletaPorNome() {
+        System.out.print("Nome do atleta: ");
+        String nome = scanner.nextLine().trim();
+
+        Atleta atleta = atletaDAO.pesquisarPorNome(nome);
+
+        if (atleta != null) {
+            System.out.println(atleta.exibeInformacoes());
+        } else {
+            System.out.println("Atleta não encontrado!");
+        }
+    }
+
+
+    private void editarAtleta() {
+        System.out.print("Código do atleta: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine();
+
+        Atleta existente = atletaDAO.pesquisarPorCodigo(codigo);
+        if(existente != null) {
+            System.out.print("Novo nome: ");
+            String nome = scanner.nextLine();
+
+            System.out.print("Nova idade: ");
+            int idade = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.print("Nova posição: ");
+            String posicao = scanner.nextLine();
+
+            Atleta atualizado = new Atleta(nome, idade, posicao);
+            atualizado.setTime(existente.getTime());
+            atletaDAO.editar(codigo, atualizado);
+
+            System.out.println("Atleta atualizado!");
+        } else System.out.println("Atleta não encontrado!");
+    }
+
+    private void removerAtleta() {
+        System.out.print("Código do atleta: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine();
+
+        atletaDAO.remover(codigo);
+        System.out.println("Atleta removido!");
+    }
+
     private void gerenciarTimes() {
         int opcao;
         do {
@@ -57,10 +182,11 @@ public class Menu {
             System.out.println("1. Cadastrar Time");
             System.out.println("2. Listar Times");
             System.out.println("3. Buscar Time por Código");
-            System.out.println("4. Editar Time");
-            System.out.println("5. Remover Time");
-            System.out.println("6. Adicionar Atleta ao Time");
-            System.out.println("7. Associar Treinador ao Time");
+            System.out.println("4. Buscar Time por Nome");
+            System.out.println("5. Editar Time");
+            System.out.println("6. Remover Time");
+            System.out.println("7. Adicionar Atleta ao Time");
+            System.out.println("8. Associar Treinador ao Time");
             System.out.println("0. Voltar");
 
             System.out.print("Escolha uma opção: ");
@@ -78,15 +204,18 @@ public class Menu {
                     buscarTimePorCodigo();
                     break;
                 case 4:
-                    editarTime();
+                    buscarTimePorNome();
                     break;
                 case 5:
-                    removerTime();
+                    editarTime();
                     break;
                 case 6:
-                    adicionarAtletaAoTime();
+                    removerTime();
                     break;
                 case 7:
+                    adicionarAtletaAoTime();
+                    break;
+                case 8:
                     associarTreinadorAoTime();
                     break;
                 case 0:
@@ -127,6 +256,20 @@ public class Menu {
 
         Time time = timeDAO.pesquisarPorCodigo(codigo);
         if (time != null) {
+            System.out.println(time.exibeInformacoes());
+        } else {
+            System.out.println("Time não encontrado!");
+        }
+    }
+
+    private void buscarTimePorNome() {
+        System.out.print("Nome do time: ");
+        String nome = scanner.nextLine().trim();
+
+        Time time = timeDAO.pesquisarPorNome(nome);
+
+        if (time != null) {
+            System.out.println("Time encontrado:");
             System.out.println(time.exibeInformacoes());
         } else {
             System.out.println("Time não encontrado!");
@@ -221,45 +364,50 @@ public class Menu {
     }
 
     private void gerenciarTreinadores() {
-        // ... (lógica de gerenciamento de treinadores, se necessário)
-    }
-
-    private void gerenciarAtletas() {
         int opcao;
         do {
-            System.out.println("\n=== GERENCIAR ATLETAS ===");
-            System.out.println("1. Cadastrar Atleta");
-            System.out.println("2. Listar Atletas");
-            System.out.println("3. Buscar Atleta por Código");
-            System.out.println("4. Editar Atleta");
-            System.out.println("5. Remover Atleta");
+            System.out.println("\n=== GERENCIAR TREINADORES ===");
+            System.out.println("1. Cadastrar Treinador");
+            System.out.println("2. Listar Treinadores");
+            System.out.println("3. Buscar Treinador por Código");
+            System.out.println("4. Buscar Treinador por Nome");
+            System.out.println("5. Editar Treinador");
+            System.out.println("6. Remover Treinador");
             System.out.println("0. Voltar");
 
             System.out.print("Escolha uma opção: ");
             opcao = scanner.nextInt();
             scanner.nextLine();
 
-            switch(opcao) {
+            switch (opcao) {
                 case 1:
-                    cadastrarAtleta();
+                    cadastrarTreinador();
                     break;
                 case 2:
-                    listarAtletas();
+                    listarTreinadores();
                     break;
                 case 3:
-                    buscarAtletaPorCodigo();
+                    buscarTreinadorPorCodigo();
                     break;
                 case 4:
-                    editarAtleta();
+                    buscarTreinadorPorNome();
                     break;
                 case 5:
-                    removerAtleta();
+                    editarTreinador();
                     break;
+                case 6:
+                    removerTreinador();
+                    break;
+                case 0:
+                    System.out.println("Voltando...");
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
             }
-        } while(opcao != 0);
+        } while (opcao != 0);
     }
 
-    private void cadastrarAtleta() {
+    private void cadastrarTreinador() {
         System.out.print("Nome: ");
         String nome = scanner.nextLine();
 
@@ -267,41 +415,59 @@ public class Menu {
         int idade = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.print("Posição: ");
-        String posicao = scanner.nextLine();
+        System.out.print("Quantidade de títulos: ");
+        int titulos = scanner.nextInt();
+        scanner.nextLine();
 
-        Atleta atleta = new Atleta(nome, idade, posicao);
-        atletaDAO.cadastrar(atleta);
+        Treinador treinador = new Treinador(nome, idade, titulos);
+        treinadorDAO.cadastrar(treinador);
 
-        System.out.println("Atleta cadastrado!");
+        System.out.println("Treinador cadastrado com sucesso!");
     }
 
-    private void listarAtletas() {
-        Map<Integer, Atleta> atletas = atletaDAO.listar();
-        if(atletas.isEmpty())
-            System.out.println("Nenhum atleta cadastrado.");
-        else for(Map.Entry<Integer, Atleta> entry : atletas.entrySet())
-            System.out.println("Código: " + entry.getKey() + " - " + entry.getValue().exibeInformacoes());
+    private void listarTreinadores() {
+        Map<Integer, Treinador> treinadores = treinadorDAO.listar();
+        if (treinadores.isEmpty()) {
+            System.out.println("Nenhum treinador cadastrado.");
+        } else {
+            for (Map.Entry<Integer, Treinador> entry : treinadores.entrySet()) {
+                System.out.println("Código: " + entry.getKey() + " - " + entry.getValue().exibeInformacoes());
+            }
+        }
     }
 
-    private void buscarAtletaPorCodigo() {
-        System.out.print("Código do atleta: ");
+    private void buscarTreinadorPorCodigo() {
+        System.out.print("Código do treinador: ");
         int codigo = scanner.nextInt();
         scanner.nextLine();
 
-        Atleta atleta = atletaDAO.pesquisarPorCodigo(codigo);
-        if(atleta != null)
-            System.out.println(atleta.exibeInformacoes());
-        else System.out.println("Atleta não encontrado!");
+        Treinador treinador = treinadorDAO.pesquisarPorCodigo(codigo);
+        if (treinador != null) {
+            System.out.println(treinador.exibeInformacoes());
+        } else {
+            System.out.println("Treinador não encontrado!");
+        }
     }
 
-    private void editarAtleta() {
-        System.out.print("Código do atleta: ");
+    private void buscarTreinadorPorNome() {
+        System.out.print("Nome do treinador: ");
+        String nome = scanner.nextLine().trim();
+
+        Treinador treinador = treinadorDAO.pesquisarPorNome(nome);
+        if (treinador != null) {
+            System.out.println(treinador.exibeInformacoes());
+        } else {
+            System.out.println("Treinador não encontrado!");
+        }
+    }
+
+    private void editarTreinador() {
+        System.out.print("Código do treinador: ");
         int codigo = scanner.nextInt();
         scanner.nextLine();
 
-        Atleta existente = atletaDAO.pesquisarPorCodigo(codigo);
-        if(existente != null) {
+        Treinador existente = treinadorDAO.pesquisarPorCodigo(codigo);
+        if (existente != null) {
             System.out.print("Novo nome: ");
             String nome = scanner.nextLine();
 
@@ -309,23 +475,27 @@ public class Menu {
             int idade = scanner.nextInt();
             scanner.nextLine();
 
-            System.out.print("Nova posição: ");
-            String posicao = scanner.nextLine();
+            System.out.print("Nova quantidade de títulos: ");
+            int titulos = scanner.nextInt();
+            scanner.nextLine();
 
-            Atleta atualizado = new Atleta(nome, idade, posicao);
+            Treinador atualizado = new Treinador(nome, idade, titulos);
             atualizado.setTime(existente.getTime());
-            atletaDAO.editar(codigo, atualizado);
+            treinadorDAO.editar(codigo, atualizado);
 
-            System.out.println("Atleta atualizado!");
-        } else System.out.println("Atleta não encontrado!");
+            System.out.println("Treinador atualizado!");
+        } else {
+            System.out.println("Treinador não encontrado!");
+        }
     }
 
-    private void removerAtleta() {
-        System.out.print("Código do atleta: ");
+    private void removerTreinador() {
+        System.out.print("Código do treinador: ");
         int codigo = scanner.nextInt();
         scanner.nextLine();
 
-        atletaDAO.remover(codigo);
-        System.out.println("Atleta removido!");
+        treinadorDAO.remover(codigo);
+        System.out.println("Treinador removido!");
     }
+
 }

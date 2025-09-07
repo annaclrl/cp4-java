@@ -28,8 +28,9 @@ public class Treinador extends Pessoa {
 
     @Override
     public String exibeInformacoes() {
-        String timeNome = (time != null) ? time.getNome() : "Sem time";
-        return String.format("Treinador: \n | Idade:  \n | Títulos: \n | Time: ",
-                getNome(), getIdade(), titulos, timeNome);
+        return "Treinador: " + getNome() +
+                " | Idade: " + getIdade() +
+                " | Títulos: " + titulos +
+                " | Time: " + (time != null ? time.getNome() : "Sem time");
     }
 }

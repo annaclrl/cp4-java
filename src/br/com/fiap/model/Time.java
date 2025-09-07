@@ -38,13 +38,23 @@ public class Time {
 
     public String exibeInformacoes() {
         StringBuilder info = new StringBuilder();
-        info.append("Time: ").append(nome).append("\n");
-        info.append("Treinador: ").append(treinador != null ? treinador.getNome() : "Não definido").append("\n");
-        info.append("Atletas: \n");
+        info.append("Time: ").append(getNome())
+                .append(" | Treinador: ")
+                .append(getTreinador() != null ? getTreinador().getNome() : "Não definido")
+                .append(" | Atletas: ");
 
-        for (Atleta atleta : atletas) {
-            info.append("  - ").append(atleta.getNome()).append(" (").append(atleta.getPosicao()).append(")\n");
+        if (getAtletas() != null && !getAtletas().isEmpty()) {
+            for (Atleta atleta : getAtletas()) {
+                info.append(atleta.getNome())
+                        .append(" (").append(atleta.getPosicao()).append("), ");
+            }
+            // remove a última vírgula e espaço
+            info.setLength(info.length() - 2);
+        } else {
+            info.append("Nenhum atleta cadastrado");
         }
+
         return info.toString();
     }
+
 }
